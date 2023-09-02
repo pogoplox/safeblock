@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "examplemod",
+  "version": "${version}",
+
+  "name": "Nitro Block Mod",
+  "description": "Adds a Nitro Block into BTA.",
+  "authors": [
+    "pogoplox"
+  ],
+  "contact": {
+    "homepage": "https://github.com/pogoplox/nitroblockmod",
+    "sources": ""
+  },
+
+  "license": "CC0-1.0",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "turniplabs.examplemod.SafeBlockMod"
+    ]
+  },
+  "mixins": [
+      "examplemod.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.13.3"
+  },
+  "suggests": {
+  }
+}
