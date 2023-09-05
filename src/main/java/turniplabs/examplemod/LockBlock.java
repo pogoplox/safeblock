@@ -11,7 +11,7 @@ import net.minecraft.core.world.World;
 import net.minecraft.core.world.WorldSource;
 
 public class LockBlock extends Block {
-    public LockBlock(String key, int id, Material material) {
+    public LockBlock(String key, int id,  Material material) {
         super(key, id, material);
     }
 
@@ -26,41 +26,26 @@ public class LockBlock extends Block {
     @Override
     public void onBlockRemoval(World world, int x, int y, int z) {
         world.setBlockMetadataWithNotify(x,y,z,0);
-        SafeBlockMod.LOGGER.info("Block destroyed");
         super.onBlockRemoval(world, x, y, z);
     }
 
     @Override
     public boolean blockActivated(World world, int x, int y, int z, EntityPlayer player) {
 
-        ItemStack currentItem = player.inventory.getCurrentItem();
+        LockLogic.setOnLogicListener(world,x,y,z,player,new LockLogic() {
+            @Override
+            public void onSuccess(World world, int x, int y, int z, EntityPlayer player) {
+                world.setBlockMetadataWithNotify(x,y,z,BLOCK_ACTIVATED);
 
-        if (currentItem != null && player.inventory.getCurrentItem().getItem().id == 17003) {
-            Integer itemMetadataInt = currentItem.getMetadata();
-
-            Integer defaultMetadata = world.getBlockMetadata(x,y,z);
-            byte byteMetadata = defaultMetadata.byteValue();
-
-            Integer activatedInt = player.id;
-            byte byteActivated = activatedInt.byteValue();
-
-            if (byteMetadata == BLOCK_DEACTIVATED && itemMetadataInt.byteValue() == BLOCK_DEACTIVATED){
-                currentItem.setMetadata(player.id);
-                world.setBlockMetadata(x,y,z,player.id);
-                player.addChatMessage("Key paired with block " + "Player ID:" + String.valueOf(player.id));
-                return true;
             }
 
-            if (itemMetadataInt.byteValue() == byteActivated) {
-                if (byteMetadata == byteActivated ) {
-                    world.setBlockMetadataWithNotify(x,y,z,BLOCK_ACTIVATED);
-                } else if (byteMetadata == 2 )  {
-                    world.setBlockMetadataWithNotify(x,y,z,player.id);
-                }
-            }
+            @Override
+            public void onOnFailure(World world, int x, int y, int z, EntityPlayer player) {
+                world.setBlockMetadataWithNotify(x,y,z,player.id);
 
-        }
-        
+            }
+        });
+
         return super.blockActivated(world, x, y, z, player);
     }
 

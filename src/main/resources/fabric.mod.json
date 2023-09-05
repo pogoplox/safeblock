@@ -18,7 +18,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "turniplabs.examplemod.SafeBlockMod"
+        "turniplabs.examplemod.NitroBlockMod"
     ]
   },
   "mixins": [
